@@ -212,10 +212,15 @@ class VRPDriver(NetworkDriver):
         # 由于堆叠设备会有多少个SN，所以这里用列表展示
         re_sn = r"ESN\s+of\s+slot\s+\S+\s+(?P<serial_number>\S+)"
         serial_number = re.findall(re_sn, show_esn, flags=re.M)
-
+        
         if 'sysname ' in show_hostname:
-            _, hostname = show_hostname.split("sysname ")
-            hostname = hostname.strip()
+            hostname = show_hostname.split("sysname ")
+            if type(hostname) == list:
+                hostname = hostname[0]
+                hostname = hostname.strip()
+            else:
+                _, hostname = show_hostname.split("sysname ")
+                hostname = hostname.strip()
 
         # interface_list filter
         interface_list = []
